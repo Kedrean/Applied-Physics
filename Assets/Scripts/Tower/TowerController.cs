@@ -8,8 +8,7 @@ public class TowerController : MonoBehaviour
     public float checkInterval = 2.5f;
     public LayerMask enemyLayer;
 
-    [Header("Barrel")]
-    public Transform barrel;
+    [Header("Rotation")]
     public float rotSpeed = 5f;
 
     private Transform currentTarget;
@@ -43,7 +42,7 @@ public class TowerController : MonoBehaviour
             return;
         }
 
-        RotateBarrel();
+        RotateTower();
     }
 
     void FindNearestEnemy()
@@ -66,13 +65,13 @@ public class TowerController : MonoBehaviour
         currentTarget = nearestEnemy;
     }
 
-    void RotateBarrel()
+    void RotateTower()
     {
-        Vector3 dir = currentTarget.position - barrel.position;
+        Vector3 dir = currentTarget.position - transform.position;
         dir.y = 0f;
 
         Quaternion lookRotation = Quaternion.LookRotation(dir);
-        barrel.rotation = Quaternion.Slerp(barrel.rotation, lookRotation, Time.deltaTime * rotSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotSpeed);
     }
 
     public Transform GetCurrentTarget()
@@ -86,16 +85,14 @@ public class TowerController : MonoBehaviour
         
         Gizmos.DrawWireSphere(transform.position, detectRad);
 
-        if (barrel != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(barrel.position, barrel.position + barrel.forward * detectRad);
-        }
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * detectRad);
+        
 
         if (currentTarget != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(barrel.position, currentTarget.position);
+            Gizmos.DrawLine(transform.position, currentTarget.position);
         }
     }
 }

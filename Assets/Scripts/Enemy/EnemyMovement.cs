@@ -4,10 +4,9 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     public float speed = 2f;
-    public float roamDist = 15f;
+    public float moveDist = 15f;
 
     private Vector3 startPos;
-    private int dir;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,12 +17,16 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * dir * speed * Time.deltaTime);
-        float dist = Vector3.Distance(startPos, transform.position);
-        if (dist >= roamDist)
+        float step = speed * Time.deltaTime;
+
+        transform.Translate(Vector3.forward * step);
+
+        float traveled = Vector3.Distance(startPos, transform.position);
+
+        if (traveled >= moveDist)
         {
-            dir *= -1;
             transform.Rotate(0, 180, 0);
+            startPos = transform.position;
         }
     }
 }

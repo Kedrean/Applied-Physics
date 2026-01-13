@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class TowerAttack : MonoBehaviour
 {
-    public int damage = 1;
+    public GameObject bulletPrefab;
+    public Transform firePoint;
     public float fireRate = 1f;
 
     private TowerController tower;
@@ -21,17 +22,17 @@ public class TowerAttack : MonoBehaviour
 
         Transform target = tower.GetCurrentTarget();
 
-        if (target != null) return;
+        if (target == null) return;
 
         if (timer >= fireRate)
         {
-            EnemyHealth enemy = target.GetComponent<EnemyHealth>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage);
-            }
-
+            Shoot();
             timer = 0f;
         }
+    }
+
+    void Shoot()
+    {
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     }
 }
