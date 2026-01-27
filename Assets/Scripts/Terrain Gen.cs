@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class TerrainGen : MonoBehaviour
 {
     [Header("Spawn Settings")]
-    public GameObject treePrefab;
+    public GameObject[] treePrefabs;
     public int treeCount = 15;
     public float spawnRadius = 10f;
     public float minSpacing = 2.5f;
@@ -19,6 +19,7 @@ public class TerrainGen : MonoBehaviour
     public float raycastHeight = 100f;
 
     private List<Vector3> spawnedPositions = new List<Vector3>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -34,11 +35,13 @@ public class TerrainGen : MonoBehaviour
         {
             attempts++;
 
+            Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
+
             Vector3 randomPos = new Vector3
             (
-                Random.Range(-spawnRadius, spawnRadius), 
-                raycastHeight, 
-                Random.Range(-spawnRadius, spawnRadius)
+                transform.position.x + randomCircle.x, 
+                raycastHeight,
+                transform.position.z + randomCircle.y
             );
 
             if (Physics.Raycast(randomPos, Vector3.down, out RaycastHit hit, raycastHeight * 2f, terrainLayer)) 
@@ -61,9 +64,11 @@ public class TerrainGen : MonoBehaviour
 
                 if (overlaps.Length == 0)
                 {
+                    GameObject selectedTree = treePrefabs[Random.Range(0, treePrefabs.Length)];
+
                     Instantiate
                     (
-                        treePrefab, 
+                        selectedTree, 
                         spawnPoint, 
                         Quaternion.Euler(-90f, 0f, 0f)
                     );
@@ -81,6 +86,9 @@ public class TerrainGen : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, spawnRadius);
+
         Gizmos.color = Color.green;
         foreach (var pos in spawnedPositions)
         {

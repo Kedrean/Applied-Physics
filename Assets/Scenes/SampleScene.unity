@@ -148,10 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edde2493cd9756f48be87231eda8fe1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treePrefab: {fileID: 1069289201138886, guid: 6b444276162548b4e9107350b71e775a, type: 3}
+  treePrefabs:
+  - {fileID: 1069289201138886, guid: 6b444276162548b4e9107350b71e775a, type: 3}
+  - {fileID: 1593950697155818, guid: d2cd02263a1e8084abf81f1324b929be, type: 3}
   treeCount: 15
-  spawnRadius: 25
-  minSpacing: 0.5
+  spawnRadius: 15
+  minSpacing: 1
   terrainLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -159,7 +161,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   waterHeight: 0
-  shorelineBuffer: 0.25
+  shorelineBuffer: 0.35
   raycastHeight: 100
 --- !u!4 &82107498
 Transform:
