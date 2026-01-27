@@ -13,6 +13,7 @@ public class TerrainGen : MonoBehaviour
 
     [Header("Terrain Settings")]
     public float waterHeight = 0f;
+    public float shorelineBuffer = 0.1f;
 
     [Header("Raycast")]
     public float raycastHeight = 100f;
@@ -44,7 +45,9 @@ public class TerrainGen : MonoBehaviour
             {
                 Vector3 spawnPoint = hit.point;
 
-                if (spawnPoint.y <= waterHeight)
+                float heightAboveWater = spawnPoint.y - waterHeight;
+
+                if (heightAboveWater < shorelineBuffer)
                 {
                     continue;
                 }
