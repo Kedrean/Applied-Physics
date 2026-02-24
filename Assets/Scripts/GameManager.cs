@@ -1,16 +1,28 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static GameManager Instance;
+
+    public int enemyCount;
+
+    private void Awake()
     {
-        
+        Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void EnemyKilled()
     {
-        
+        enemyCount--;
+
+        if (enemyCount <= 0)
+            GameOver();
+    }
+
+    void GameOver()
+    {
+        Debug.Log("You Win!");
+        Time.timeScale = 0f;
     }
 }
