@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +22,13 @@ public class GameManager : MonoBehaviour
 
     void GameOver()
     {
+        StartCoroutine(GameOverDelay());
+    }
+
+    IEnumerator GameOverDelay()
+    {
+        yield return new WaitForSecondsRealtime(5f);
+
         Debug.Log("You Win!");
         Time.timeScale = 0f;
     }

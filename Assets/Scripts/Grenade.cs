@@ -13,7 +13,8 @@ public class Grenade : MonoBehaviour
 
     void Explode()
     {
-        Instantiate(explosionFX, transform.position, Quaternion.identity);
+        GameObject fx = Instantiate(explosionFX, transform.position, Quaternion.identity);
+        Destroy(fx, 0.5f);
 
         Collider[] hits = Physics.OverlapSphere(transform.position, radius);
 

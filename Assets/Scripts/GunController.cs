@@ -8,29 +8,38 @@ public class GunController : MonoBehaviour
 
     public LayerMask enemyLayer;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log("CLICK");
             Shoot();
         }
     }
 
     void Shoot()
     {
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, range, enemyLayer))
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, range))
         {
-            EnemyHealth enemy = hit.collider.GetComponentInParent<EnemyHealth>();
+            Debug.Log("HIT: " + hit.collider.name);
 
+            EnemyHealth enemy = hit.collider.GetComponentInParent<EnemyHealth>();
             if (enemy != null)
+            {
                 enemy.TakeDamage(damage);
+            }
         }
+        else
+        {
+            Debug.Log("MISS");
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!cam) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(cam.transform.position, cam.transform.forward * range);
     }
 }

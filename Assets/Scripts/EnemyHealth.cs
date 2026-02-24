@@ -1,13 +1,16 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyHealth : MonoBehaviour
 {
     public int health = 1;
     public Animator animator;
     public Rigidbody[] ragdollBodies;
-    public Collider[] ragdollColliders;
 
-    bool dead = false;
+    [Tooltip("Time before ragdoll activates")]
+    public float ragdollDelay = 2.1f;
+
+    bool dead;
 
     void Start()
     {
@@ -19,7 +22,6 @@ public class EnemyHealth : MonoBehaviour
         if (dead) return;
 
         health -= dmg;
-
         if (health <= 0)
             Die();
     }
@@ -28,20 +30,30 @@ public class EnemyHealth : MonoBehaviour
     {
         dead = true;
 
-        animator.SetBool("dead", true);
+        animator.SetTrigger("Die");
 
-        // Small delay so death animation blends before physics takes over
-        Invoke(nameof(EnableRagdoll), 0.3f);
+        StartCoroutine(DeathSequence());
 
         GameManager.Instance.EnemyKilled();
     }
 
+    IEnumerator DeathSequence()
+    {
+        // Apply gravity immediately to prevent floating
+        foreach (var rb in ragdollBodies)
+            rb.useGravity = true;
+
+        yield return new WaitForSeconds(ragdollDelay);
+
+        EnableRagdoll();
+    }
+
     void EnableRagdoll()
     {
-        // Instead of disabling animator, just stop root motion
-        animator.applyRootMotion = false;
+        animator.enabled = false;
 
-        SetRagdoll(true);
+        foreach (var rb in ragdollBodies)
+            rb.isKinematic = false;
     }
 
     void SetRagdoll(bool active)
@@ -49,11 +61,7 @@ public class EnemyHealth : MonoBehaviour
         foreach (var rb in ragdollBodies)
         {
             rb.isKinematic = !active;
-        }
-
-        foreach (var col in ragdollColliders)
-        {
-            col.enabled = active;
+            rb.useGravity = active;
         }
     }
 }

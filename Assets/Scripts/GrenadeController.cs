@@ -6,11 +6,7 @@ public class GrenadeController : MonoBehaviour
     public Transform throwPoint;
     public float throwForce = 15f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public float explosionRadius = 5f;
 
     // Update is called once per frame
     void Update()
@@ -25,5 +21,13 @@ public class GrenadeController : MonoBehaviour
     {
         GameObject grenade = Instantiate(grenadePrefab, throwPoint.position, throwPoint.rotation);
         grenade.GetComponent<Rigidbody>().AddForce(throwPoint.forward * throwForce, ForceMode.Impulse);
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!throwPoint) return;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(throwPoint.position + throwPoint.forward * 5f, explosionRadius);
     }
 }
